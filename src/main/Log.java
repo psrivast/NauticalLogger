@@ -38,7 +38,7 @@ public class Log {
 
     /**
      * Return a formatted message with timestamp and priority
-     * 
+     *
      * @return
      */
     public String getFormattedMessage() {

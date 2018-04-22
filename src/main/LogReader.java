@@ -27,4 +27,15 @@ public class LogReader {
     public String getFormatted() {
         return logsCache.get(true);
     }
+
+    /**
+     * Dumps logs into a text file in current directory and
+     * returns string representation
+     * @return
+     */
+    public String seeAllLogs() {
+        String logReport = logsCache.formattedDump();
+        System.out.println(logReport);
+        return logReport;
+    }
 }

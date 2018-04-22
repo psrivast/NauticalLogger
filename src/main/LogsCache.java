@@ -1,6 +1,7 @@
 package main;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -57,6 +58,22 @@ public class LogsCache {
     }
 
     /**
+     * Returns a string with all logs (formatted)
+     *
+     * @return
+     */
+    public String formattedDump() {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 3; i > 0; i--) {
+            while(!logsCache.get(i).isEmpty()) {
+                sb.append(logsCache.get(i).pop().getFormattedMessage());
+            }
+        }
+
+        return sb.toString();
+    }
+
+    /**
      * Add message for given priority
      *
      * @param priority
@@ -75,6 +92,4 @@ public class LogsCache {
             logs.clear();
         }
     }
-
-
 }
