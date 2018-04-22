@@ -1,5 +1,6 @@
 package test;
 
+import main.LogBuffer;
 import main.LogReader;
 import main.Logger;
 import main.LogsCache;
@@ -19,8 +20,13 @@ public class LoggerTest {
         LogsCache.getInstance().clearLogs();
     }
 
+    /**
+     * This is the included test for basic functionality with Loggers
+     */
     @Test
     public void BasicTests() {
+        clearLogs();
+
         Logger logger = new Logger();
         logger.log(1, sailorMsg1);
         logger.log(2, sailorMsg2);
@@ -31,12 +37,15 @@ public class LoggerTest {
         Assert.assertEquals(logReader.get(), sailorMsg3);
         Assert.assertEquals(logReader.get(), sailorMsg1);
         Assert.assertEquals(logReader.get(), emptyMsg);
-
-        clearLogs();
     }
 
+    /**
+     * This tests the behavior if we instantiate multiple loggers
+     */
     @Test
     public void MultipleLoggersTest() {
+        clearLogs();
+
         Logger logger1 = new Logger();
         Logger logger2 = new Logger();
         Logger logger3 = new Logger();
@@ -49,12 +58,12 @@ public class LoggerTest {
         Assert.assertEquals(logReader.get(), sailorMsg3);
         Assert.assertEquals(logReader.get(), sailorMsg1);
         Assert.assertEquals(logReader.get(), emptyMsg);
-
-        clearLogs();
     }
 
     @Test
     public void PriorityLoggingTest() {
+        clearLogs();
+
         Logger logger = new Logger();
         logger.logHighPriority(sailorMsg4);
         logger.logMedPriority(sailorMsg1);
@@ -67,8 +76,44 @@ public class LoggerTest {
         Assert.assertEquals(logReader.get(), sailorMsg1);
         Assert.assertEquals(logReader.get(), sailorMsg5);
         logReader.get();
-
-        clearLogs();
     }
 
+    @Test
+    public void LogBufferTest() {
+        clearLogs();
+
+        LogBuffer lb1 = new LogBuffer(1);
+        LogBuffer lb2 = new LogBuffer(2);
+        LogBuffer lb3 = new LogBuffer(3);
+        lb1.appendNewLine(sailorMsg1);
+        lb2.append(sailorMsg2);
+        lb1.append(sailorMsg3);
+        lb3.append("This is ");
+        lb3.append("a test :)");
+        lb3.done();
+        lb2.done();
+        lb1.done();
+
+        LogReader logReader = new LogReader();
+        Assert.assertEquals(logReader.get(), "This is a test :)");
+        Assert.assertEquals(logReader.get(), sailorMsg2);
+        Assert.assertEquals(logReader.get(), sailorMsg1 + "\n" + sailorMsg3);
+        Assert.assertEquals(logReader.get(), emptyMsg);
+    }
+
+    @Test
+    public void SeeFormattedLogs(){
+        clearLogs();
+
+        Logger logger = new Logger();
+        logger.log(1, sailorMsg1);
+        logger.log(2, sailorMsg2);
+        logger.log(1, sailorMsg3);
+
+        LogReader logReader = new LogReader();
+        System.out.println(logReader.getFormatted());
+        System.out.println(logReader.getFormatted());
+        System.out.println(logReader.getFormatted());
+        System.out.println(logReader.getFormatted());
+    }
 }
