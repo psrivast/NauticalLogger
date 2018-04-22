@@ -6,17 +6,18 @@ package main;
  * A thread-safe mutable sequence of character. Uses the StringBuffer
  */
 public class LogBuffer {
-       private StringBuffer sb;
-    private Logger logger;
+    private StringBuffer sb;
+    private LogsCache logsCache;
     private int priority;
 
     /**
+     * Get instance of logsCache and sets priority
      *
      * @param priority
      */
     public LogBuffer(int priority) {
         this.sb = new StringBuffer();
-        this.logger = new Logger();
+        this.logsCache = LogsCache.getInstance();
         this.priority = priority;
     }
 
@@ -32,7 +33,6 @@ public class LogBuffer {
     /**
      * Appends the specified string and adds a new line
      *
-     *
      * @param str
      */
     public void appendNewLine(String str) {
@@ -40,27 +40,18 @@ public class LogBuffer {
     }
 
     /**
-     * Returns a string representing the data in this sequence.
-     *
+     * Returns string from buffer
      * @return
      */
     public String toString() {
-        return sb.toString();
+        return  sb.toString();
     }
 
     /**
-     * Clears string buffer
-     */
-    public void clear() {
-        sb.delete(0, sb.length());
-    }
-
-    /**
-     * Logs message and clears buffer. Priority is set to 0 to mark unitialized
+     * Adds log message to cache and clears StringBuffer
      */
     public void done() {
-        logger.log(priority, sb.toString());
-        priority = 0;
-        clear();
+        logsCache.put(priority, sb.toString());
+        sb.delete(0, sb.length());
     }
 }
