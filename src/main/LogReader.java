@@ -1,8 +1,12 @@
 package main;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class LogReader {
 
-    LogsCache logsCache;
+    private LogsCache logsCache;
+    private final static String OUTPUT_FILE = "logs.txt";
 
     /**
      * Get copy of LogsCache singleton
@@ -33,9 +37,13 @@ public class LogReader {
      * returns string representation
      * @return
      */
-    public String seeAllLogs() {
+    public String dumpAllLogs() throws IOException {
         String logReport = logsCache.formattedDump();
-        System.out.println(logReport);
+
+        FileWriter fw = new FileWriter(OUTPUT_FILE);
+        fw.write(logReport);
+        fw.close();
+
         return logReport;
     }
 }

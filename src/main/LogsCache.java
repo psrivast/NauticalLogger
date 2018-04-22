@@ -67,6 +67,7 @@ public class LogsCache {
         for(int i = 3; i > 0; i--) {
             while(!logsCache.get(i).isEmpty()) {
                 sb.append(logsCache.get(i).pop().getFormattedMessage());
+                sb.append("\n");
             }
         }
 
