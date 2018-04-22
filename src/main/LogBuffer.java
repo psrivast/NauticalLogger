@@ -40,14 +40,6 @@ public class LogBuffer {
     }
 
     /**
-     * Returns string from buffer
-     * @return
-     */
-    public String toString() {
-        return  sb.toString();
-    }
-
-    /**
      * Adds log message to cache and clears StringBuffer
      */
     public void done() {
