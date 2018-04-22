@@ -7,6 +7,8 @@ import main.LogsCache;
 import org.junit.Test;
 import org.junit.Assert;
 
+import java.io.IOException;
+
 public class LoggerTest {
 
     private String sailorMsg1 = "Avast, mateys! Let’s weigh anchor here.";
@@ -60,6 +62,12 @@ public class LoggerTest {
         Assert.assertEquals(logReader.get(), emptyMsg);
     }
 
+    /**
+     * This tests the priority logging functions:
+     * - logHighPriority
+     * - logMedPriority
+     * - logLowPriority
+     */
     @Test
     public void PriorityLoggingTest() {
         clearLogs();
@@ -78,6 +86,9 @@ public class LoggerTest {
         logReader.get();
     }
 
+    /**
+     * This tests the log buffer functionality
+     */
     @Test
     public void LogBufferTest() {
         clearLogs();
@@ -101,7 +112,11 @@ public class LoggerTest {
         Assert.assertEquals(logReader.get(), emptyMsg);
     }
 
-    @Test
+    /**
+     * This test allows us to see the Formatting of logs.
+     * (Cannot assert here due to unpredictable timestamp)
+     */
+    //@Test
     public void SeeFormattedLogs(){
         clearLogs();
 
@@ -115,5 +130,45 @@ public class LoggerTest {
         System.out.println(logReader.getFormatted());
         System.out.println(logReader.getFormatted());
         System.out.println(logReader.getFormatted());
+    }
+
+    /**
+     * Tests working with a LogBuffer and a Logger in the same workflow
+     */
+    @Test
+    public void LogBufferAndLoggerTest() {
+        clearLogs();
+
+        Logger logger = new Logger();
+        LogBuffer lb = new LogBuffer(2);
+        logger.log(1, sailorMsg1);
+        lb.append("This is ");
+        logger.log(3, sailorMsg4);
+        lb.append("a test :)");
+        lb.done();
+
+        LogReader logReader = new LogReader();
+        Assert.assertEquals(logReader.get(), sailorMsg4);
+        Assert.assertEquals(logReader.get(), "This is a test :)");
+        Assert.assertEquals(logReader.get(), sailorMsg1);
+        Assert.assertEquals(logReader.get(), emptyMsg);
+    }
+
+    /**
+     * Prints all logs to standard out
+     */
+    @Test
+    public void SeeAllLogs() throws IOException {
+        clearLogs();
+
+        Logger logger = new Logger();
+        logger.logHighPriority(sailorMsg4);
+        logger.logMedPriority(sailorMsg3);
+        logger.logMedPriority(sailorMsg2);
+        logger.logLowPriority(sailorMsg1);
+        logger.logLowPriority(sailorMsg5);
+
+        LogReader logReader = new LogReader();
+        System.out.println(logReader.dumpAllLogs());
     }
 }
