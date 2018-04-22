@@ -116,7 +116,7 @@ public class LoggerTest {
      * This test allows us to see the Formatting of logs.
      * (Cannot assert here due to unpredictable timestamp)
      */
-    //@Test
+    @Test
     public void SeeFormattedLogs(){
         clearLogs();
 
